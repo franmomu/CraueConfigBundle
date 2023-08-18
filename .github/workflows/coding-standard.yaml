@@ -1,0 +1,29 @@
+name: Coding Standard
+
+on:
+  pull_request: ~
+  push: ~
+
+jobs:
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php:
+          - '8.2'
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2, php-cs-fixer
+
+      - name: run php-cs-fixer
+        run: php-cs-fixer fix --ansi --verbose --diff --dry-run
